@@ -12,11 +12,25 @@ resource "google_compute_subnetwork" "xoxot_subnet" {
   network       = google_compute_network.xoxot_vpc.id
 }
 
-#중요하무니다
-output "xoxot_vpc" {
-  value = google_compute_network.xoxot_vpc
+resource "google_compute_router" "router" {
+  name    = "xoxot-router"
+  region  = "${local.region}"
+  network = google_compute_network.xoxot_vpc.id
+
+  bgp {
+    asn = 64514
+  }
 }
 
-output "xoxot_subnet" {
-  value = google_compute_subnetwork.xoxot_subnet
+resource "google_compute_router_nat" "nat" {
+  name                               = "xoxot-router-nat"
+  router                             = google_compute_router.router.name
+  region                             = "${local.region}"
+  nat_ip_allocate_option             = "AUTO_ONLY"
+  source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
+
+  log_config {
+    enable = true
+    filter = "ERRORS_ONLY"
+  }
 }
