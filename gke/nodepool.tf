@@ -11,6 +11,10 @@ resource "google_container_node_pool" "service_nodes" {
     preemptible  = true
     machine_type = "e2-medium"
 
+    labels = {
+      "node" = "service"
+    }
+
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
     # service_account = "gke-access-account@eunoia0523.iam.gserviceaccount.com"
     oauth_scopes = ["https://www.googleapis.com/auth/cloud-platform"]
@@ -44,6 +48,10 @@ resource "google_container_node_pool" "cicd_nodes" {
   node_config {
     preemptible  = true
     machine_type = "e2-medium"
+
+    labels = {
+      "node" = "cicd"
+    }
 
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
     # service_account = "gke-access-account@eunoia0523.iam.gserviceaccount.com"
