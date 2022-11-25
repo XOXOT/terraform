@@ -4,8 +4,6 @@ resource "google_container_node_pool" "service_nodes" {
   name               = "service-pool"
   cluster            = data.terraform_remote_state.bucket.outputs.cluster_id
   initial_node_count = 1
-  
-  #max_pods_per_node = 8
 
   node_locations = ["asia-northeast3-b", "asia-northeast3-c"]
 
@@ -41,8 +39,6 @@ resource "google_container_node_pool" "cicd_nodes" {
   cluster            = data.terraform_remote_state.bucket.outputs.cluster_id
   initial_node_count = 1
 
-  #max_pods_per_node = 8
-
   node_locations = ["asia-northeast3-a"]
 
   node_config {
@@ -63,9 +59,5 @@ resource "google_container_node_pool" "cicd_nodes" {
   management {
     auto_repair  = true
     auto_upgrade = true
-  }
-  autoscaling {
-    min_node_count = 2
-    max_node_count = 8
   }
 }
